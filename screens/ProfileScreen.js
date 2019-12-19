@@ -1,100 +1,135 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
   View,
   Image,
   TouchableOpacity
-} from 'react-native';
+} from 'react-native'
+import { Container,
+  Header,
+  Content,
+  Footer,
+  FooterTab,
+  Button,
+  Icon
+} from 'native-base'
 
 export default class Profile extends Component {
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
     this.state = {
 
-    login: 'Janek69Rosweldo',
-    avatarUri: 'https://i.imgur.com/bWln98R.jpeg',
+      login: 'Janek Lesgos',
+      avatarUri: 'https://i.imgur.com/bWln98R.jpeg',
+      email: 'Rodo@xd.uwm.edu.student.com'
     }
   }
-  render() {
+
+  render () {
     return (
-      <View style={styles.container}>
-          <View style={styles.header}></View>
-          <Image style={styles.avatar} source={{uri: this.state.avatarUri}}/>
+      <Container>
+        <Header style={styles.header}>
+          <Image style={styles.avatar} source={{uri: this.state.avatarUri }} />
+        </Header>
+        <Content>
           <View style={styles.body}>
             <View style={styles.bodyContent}>
               <Text style={styles.name}>{this.state.login}</Text>
-              <Text style={styles.info}>UX Designer / Mobile developer</Text>
-              <Text style={styles.description}>Kiedyś tu będzie piękne settings</Text>
-              
+              <Text style={styles.info}>{this.state.email}</Text>
+              <Text style={styles.description}>Kiedyś tu będzie piękny settings</Text>
               <TouchableOpacity style={styles.buttonContainer} onPress={() => this.props.navigation.navigate('RejestracjaScreen')}>
-                <Text>Opcion 1</Text>  
-              </TouchableOpacity>              
+                <Text style={styles.buttonText}>Opcion 1</Text>
+              </TouchableOpacity>
               <TouchableOpacity style={styles.buttonContainer}>
-                <Text>Opcion 2</Text> 
+                <Text style={styles.buttonText}>Opcion 2</Text> 
               </TouchableOpacity>
             </View>
-        </View>
-      </View>
-    );
+          </View>
+        </Content>
+        <Footer>
+          <FooterTab style={styles.footerTab}>
+            <Button onPress={() => this.props.navigation.navigate('LearningScreen')} vertical>
+              <Icon style={styles.iconfooterTab} name='apps' />
+              <Text style={styles.footerText}>Home</Text>
+            </Button>
+            <Button onPress={() => this.props.navigation.navigate('ProfileScreen')} vertical>
+              <Icon style={styles.iconfooterTab} name='person' />
+              <Text style={styles.footerText}>Profile</Text>
+            </Button>
+            <Button onPress={() => this.props.navigation.navigate('LoginScreen')} vertical>
+              <Icon style={styles.iconfooterTab} name='md-exit' />
+              <Text style={styles.footerText}>Log out</Text>
+            </Button>
+          </FooterTab>
+        </Footer>
+      </Container>
+    )
   }
 }
 
 const styles = StyleSheet.create({
   header:{
-    backgroundColor: "#8B4513",
-    height:200,
+    backgroundColor: 'brown',
+    height: 200
   },
   avatar: {
-    width: 130,
-    height: 130,
+    width: 175,
+    height: 175,
     borderRadius: 63,
     borderWidth: 4,
-    borderColor: "brown",
-    marginBottom:10,
-    alignSelf:'center',
+    borderColor: 'brown',
+    marginBottom: 10,
+    //alignSelf: 'center',
     position: 'absolute',
-    marginTop:130
+    marginTop: 60
   },
-  name:{
-    fontSize:22,
-    color:"#FFF8DC",
-    fontWeight:'600',
+  name: {
+    fontSize: 22,
+    color: 'black',
+    fontWeight: '600'
   },
-  body:{
-    marginTop:40,
+  body: {
+    marginTop: 40
   },
   bodyContent: {
     flex: 1,
     alignItems: 'center',
-    padding:30,
+    padding: 30
   },
-  name:{
-    fontSize:28,
-    color: "#696969",
-    fontWeight: "600"
+  info: {
+    fontSize: 16,
+    color: '#DAA520',
+    marginTop: 10
   },
-  info:{
-    fontSize:16,
-    color: "#DAA520",
-    marginTop:10
-  },
-  description:{
-    fontSize:16,
-    color: "#696969",
-    marginTop:10,
+  description: {
+    fontSize: 16,
+    color: '#696969',
+    marginTop: 10,
     textAlign: 'center'
   },
   buttonContainer: {
-    marginTop:10,
-    height:45,
+    marginTop: 10,
+    height: 45,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom:20,
-    width:250,
-    borderRadius:30,
-    backgroundColor: "#98FB98",
+    marginBottom: 20,
+    width: 250,
+    borderRadius: 30,
+    backgroundColor: 'brown'
   },
-});
- 
+  buttonText: {
+    color: 'white'
+  },
+  iconfooterTab: {
+    color: 'white'
+  },
+  footerText: {
+    color: 'white',
+    opacity: 0.5
+  },
+  footerTab: {
+    backgroundColor: 'brown'
+  }
+})

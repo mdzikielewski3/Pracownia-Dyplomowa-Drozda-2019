@@ -1,98 +1,62 @@
-import React, { Component } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  Button,
-  TouchableHighlight,
-  Image,
-  Alert,
-  ScrollView
-} from 'react-native';
+import React from 'react';
+import { StyleSheet,Text, Alert} from 'react-native';
+import { Container, 
+  Header, 
+  Content,
+  Footer, 
+  FooterTab, 
+  Button, 
+  Icon, 
+  InputGroup, 
+  Input 
+} from 'native-base';
 
-export default class LoginView extends Component {
 
+export default class Home extends React.Component {
   constructor(props) {
     super(props);
-    state = {
-      email   : '',
-      password: '',
-      name: '',
-      surname: '',
+    this.state = {
+      search: '',
     }
   }
 
-  onClickListener = (viewId) => {
-    Alert.alert("Alert", "Button pressed "+viewId);
+  SearchFunction = () => {
+    Alert.alert("KLIKŁEŚ WYSZUKAJ!");
   }
 
   render() {
     return (
-      <ScrollView>
-      <View style={styles.container}>
-      
-      <Image style={{width:100,height:100, marginBottom:50}}source={require('../assets/images/Leaf.png')}/>
-      
-        <View style={styles.inputContainer}>
-          <Image style={styles.inputIcon} source={{uri: 'https://image0.flaticon.com/icons/png/512/37/37572.png?size=1200x630f'}}/>
-          <TextInput style={styles.inputs}
-              placeholder="Email"
-              keyboardType="email-address"
-              underlineColorAndroid='transparent'
-              onChangeText={(email) => this.setState({email})}/>
-        </View>
-        
-        <View style={styles.inputContainer}>
-          <Image style={styles.inputIcon} source={{uri: 'https://png.icons8.com/key-2/ultraviolet/50/3498db'}}/>
-          <TextInput style={styles.inputs}
-              placeholder="Name"
-              secureTextEntry={true}
-              underlineColorAndroid='transparent'
-              onChangeText={(password) => this.setState({password})}/>
-        </View>
-
-        <View style={styles.inputContainer}>
-          <Image style={styles.inputIcon} source={{uri: 'https://png.icons8.com/key-2/ultraviolet/50/3498db'}}/>
-          <TextInput style={styles.inputs}
-              placeholder="Surname"
-              secureTextEntry={true}
-              underlineColorAndroid='transparent'
-              onChangeText={(password) => this.setState({password})}/>
-        </View>
-
-        <View style={styles.inputContainer}>
-          <Image style={styles.inputIcon} source={{uri: 'https://png.icons8.com/key-2/ultraviolet/50/3498db'}}/>
-          <TextInput style={styles.inputs}
-              placeholder="Password"
-              secureTextEntry={true}
-              underlineColorAndroid='transparent'
-              onChangeText={(password) => this.setState({password})}/>
-        </View>
-
-        <View style={styles.inputContainer}>
-          <Image style={styles.inputIcon} source={{uri: 'https://png.icons8.com/key-2/ultraviolet/50/3498db'}}/>
-          <TextInput style={styles.inputs}
-              placeholder="Password again"
-              secureTextEntry={true}
-              underlineColorAndroid='transparent'
-              onChangeText={(password) => this.setState({password})}/>
-        </View>
-
-        
-        <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.onClickListener('login')}>
-          <Text style={styles.loginText}>Login</Text>
-        </TouchableHighlight>
-
-        <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onClickListener('restore_password')}>
-            <Text>Forgot your password?</Text>
-        </TouchableHighlight>
-
-        <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onClickListener('register')}>
-            <Text>Register</Text>
-        </TouchableHighlight>
-      </View>
-      </ScrollView>
+      <Container>
+        <Header searchBar style={styles.header}>
+          <InputGroup style={styles.headerInputGroup}>
+            <Icon name="search" style={styles.icon}/>
+            <Input placeholder="Search" style={styles.headerInput}/>
+            <Button onPress={() => this.SearchFunction()} vertical style={styles.headerButton}>
+              <Text style={styles.headerText}>Search</Text>
+            </Button>
+          </InputGroup>
+          
+        </Header>
+        <Content>
+        <Text>Tutaj jest już tylko tutaj nie ma</Text>
+        </Content>
+        <Footer>
+          <FooterTab style ={styles.footerTab}>
+            <Button  vertical>
+              <Icon style = {styles.iconfooterTab} name="apps" />
+              <Text style={styles.footerText}>Home</Text>
+            </Button>
+            <Button onPress={() => this.props.navigation.navigate('ProfileScreen')} vertical>
+              <Icon style = {styles.iconfooterTab} name="person" />
+              <Text style={styles.footerText}>Profile</Text>
+            </Button>
+            <Button vertical>
+              <Icon style = {styles.iconfooterTab} name="md-exit" />
+              <Text style={styles.footerText}>Log out</Text>
+            </Button>
+          </FooterTab>
+        </Footer>
+      </Container>
     );
   }
 }
@@ -100,46 +64,50 @@ export default class LoginView extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    backgroundColor: '#fff',
     alignItems: 'center',
-    backgroundColor: '#DEB887',
-  },
-  inputContainer: {
-      borderBottomColor: '#F5FCFF',
-      backgroundColor: '#FFFFFF',
-      borderRadius:30,
-      borderBottomWidth: 1,
-      width:250,
-      height:45,
-      marginBottom:20,
-      flexDirection: 'row',
-      alignItems:'center'
-  },
-  inputs:{
-      height:45,
-      marginLeft:16,
-      borderBottomColor: '#FFFFFF',
-      flex:1,
-  },
-  inputIcon:{
-    width:30,
-    height:30,
-    marginLeft:15,
-    justifyContent: 'center'
-  },
-  buttonContainer: {
-    height:45,
-    flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom:20,
-    width:250,
-    borderRadius:30,
   },
-  loginButton: {
-    backgroundColor: "#00b5ec",
+  icon:{
+    color:"white"
   },
-  loginText: {
-    color: 'white',
-  }
+  iconfooterTab:{
+    color:"white"
+  },
+  footerText:{
+    color:"white",
+    opacity:0.5
+  },
+  footerTab:{
+    backgroundColor:"brown"
+  },
+  header:{
+    height:70,
+    backgroundColor:"brown"
+  },
+  headerInputGroup:{
+    width:"100%",
+    marginTop:20
+  },
+ 
+  headerInput:{
+    backgroundColor:"white", 
+    borderWidth:1, 
+    borderColor:"white", 
+    borderRadius:50, 
+    height:35
+  },
+  headerButton:{
+    marginLeft:10,
+    borderWidth:1,
+    borderColor:"black",
+    backgroundColor: '#BDC3C7',
+  },
+  headerText:{
+    color:"black",
+    margin:3,
+    marginLeft:5,
+    marginRight:5
+  },
+  
 });

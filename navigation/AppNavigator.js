@@ -13,6 +13,7 @@ export default createAppContainer(
     RegisterScreen: RegisterScreen,
     ProfileScreen: ProfileScreen,
     SettingsScreen: SettingsScreen,
+    LoginScreen: LoginScreen
     //Main: MainTabNavigator,
   })
 );

@@ -38,14 +38,15 @@ export default class Home extends React.Component {
           
         </Header>
         <Content>
+        <Text>Tutaj jest już tylko tutaj nie ma</Text>
         </Content>
         <Footer>
           <FooterTab style ={styles.footerTab}>
-            <Button vertical>
+            <Button  vertical>
               <Icon style = {styles.iconfooterTab} name="apps" />
               <Text style={styles.footerText}>Home</Text>
             </Button>
-            <Button vertical>
+            <Button onPress={() => this.props.navigation.navigate('ProfileScreen')} vertical>
               <Icon style = {styles.iconfooterTab} name="person" />
               <Text style={styles.footerText}>Profile</Text>
             </Button>
@@ -73,6 +74,13 @@ const styles = StyleSheet.create({
   iconfooterTab:{
     color:"white"
   },
+  footerText:{
+    color:"white",
+    opacity:0.5
+  },
+  footerTab:{
+    backgroundColor:"brown"
+  },
   header:{
     height:70,
     backgroundColor:"brown"
@@ -81,9 +89,7 @@ const styles = StyleSheet.create({
     width:"100%",
     marginTop:20
   },
-  footerTab:{
-    backgroundColor:"brown"
-  },
+ 
   headerInput:{
     backgroundColor:"white", 
     borderWidth:1, 
@@ -103,8 +109,5 @@ const styles = StyleSheet.create({
     marginLeft:5,
     marginRight:5
   },
-  footerText:{
-    color:"white",
-    opacity:0.5
-  },
+  
 });

@@ -4,12 +4,21 @@ import {
   Text,
   View,
   TextInput,
-  Button,
   TouchableHighlight,
   Image,
   Alert,
   ScrollView
 } from 'react-native';
+import { Container, 
+  Header, 
+  Content,
+  Footer, 
+  FooterTab, 
+  Button, 
+  Icon, 
+  InputGroup, 
+  Input 
+} from 'native-base';
 
 export default class LoginView extends Component {
 
@@ -23,73 +32,66 @@ export default class LoginView extends Component {
       surname: '',
     }
   }
-
+  
   onClickListener = (viewId) => {
     Alert.alert("Alert", "Button pressed "+viewId);
   }
 
   render() {
     return (
-      <ScrollView>
-      <View style={styles.container}>
-      <Text style={styles.loginText}></Text>
-      <Text style={styles.loginText}></Text>
-      <Text style={styles.loginText}></Text>
+      <Container>
+      <Header></Header>
+      <Content>
       <Image style={{width:100,height:100, marginBottom:50}}source={require('../assets/images/Leaf.png')}/>
       
-        <View style={styles.inputContainer}>
-          <Image style={styles.inputIcon} source={{uri: 'https://image0.flaticon.com/icons/png/512/37/37572.png?size=1200x630f'}}/>
-          <TextInput style={styles.inputs}
-              placeholder="Email"
-              keyboardType="email-address"
-              underlineColorAndroid='transparent'
-              onChangeText={(email) => this.setState({email})}/>
-        </View>
-        
-        <View style={styles.inputContainer}>
-          <Image style={styles.inputIcon} source={require('../assets/images/user.png')}/>
-          <TextInput style={styles.inputs}
-              placeholder="Name"
-              keyboardType="name-phone-pad"
-              underlineColorAndroid='transparent'
-              onChangeText={(name) => this.setState({name})}/>
-        </View>
-
-        <View style={styles.inputContainer}>
-        <Image style={styles.inputIcon} source={require('../assets/images/key.png')}/>
-          <TextInput style={styles.inputs}
-              placeholder="Password"
-              secureTextEntry={true}
-              underlineColorAndroid='transparent'
-              onChangeText={(password) => this.setState({password})}/>
-        </View>
-
-        <View style={styles.inputContainer}>
-        <Image style={styles.inputIcon} source={require('../assets/images/key.png')}/>
-          <TextInput style={styles.inputs}
-              placeholder="Password again"
-              secureTextEntry={true}
-              underlineColorAndroid='transparent'
-              onChangeText={(password_again) => this.setState({password_again})}/>
-        </View>
-
-        
-        <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.onClickListener('login')}>
-          <Text style={styles.loginText}>Login</Text>
-        </TouchableHighlight>
-
-        <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onClickListener('restore_password')}>
-            <Text>Forgot your password?</Text>
-        </TouchableHighlight>
-
-        <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onClickListener('register')}>
-            <Text>Register</Text>
-        </TouchableHighlight>
-        <Text style={styles.loginText}></Text>
-        <Text style={styles.loginText}></Text>
-        <Text style={styles.loginText}></Text>
+      <View style={styles.inputContainer}>
+        <Image style={styles.inputIcon} source={{uri: 'https://image0.flaticon.com/icons/png/512/37/37572.png?size=1200x630f'}}/>
+        <TextInput style={styles.inputs}
+            placeholder="Email"
+            keyboardType="email-address"
+            underlineColorAndroid='transparent'
+            onChangeText={(email) => this.setState({email})}/>
       </View>
-      </ScrollView>
+      
+      <View style={styles.inputContainer}>
+        <Image style={styles.inputIcon} source={require('../assets/images/user.png')}/>
+        <TextInput style={styles.inputs}
+            placeholder="Name"
+            keyboardType="name-phone-pad"
+            underlineColorAndroid='transparent'
+            onChangeText={(name) => this.setState({name})}/>
+      </View>
+
+      <View style={styles.inputContainer}>
+      <Image style={styles.inputIcon} source={require('../assets/images/key.png')}/>
+        <TextInput style={styles.inputs}
+            placeholder="Password"
+            secureTextEntry={true}
+            underlineColorAndroid='transparent'
+            onChangeText={(password) => this.setState({password})}/>
+      </View>
+
+      <View style={styles.inputContainer}>
+      <Image style={styles.inputIcon} source={require('../assets/images/key.png')}/>
+        <TextInput style={styles.inputs}
+            placeholder="Password again"
+            secureTextEntry={true}
+            underlineColorAndroid='transparent'
+            onChangeText={(password_again) => this.setState({password_again})}/>
+      </View>
+
+      <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.props.navigation.navigate('ProfileScreen')}>
+        <Text style={styles.loginText}>Register</Text>
+      </TouchableHighlight>
+
+      <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onClickListener('restore_password')}>
+          <Text>Have account? Login</Text>
+      </TouchableHighlight>
+      </Content>
+      </Container>
+
+        
+      
     );
   }
 }
@@ -99,11 +101,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#ff1744',
+    backgroundColor: '#66CC66',
   },
   inputContainer: {
-      borderBottomColor: '#003399',
-      backgroundColor: '#00FFFF',
+      borderBottomColor: '#000000',
+      backgroundColor: '#FFF8DC',
       borderRadius:30,
       borderBottomWidth: 1,
       width:250,
@@ -115,7 +117,7 @@ const styles = StyleSheet.create({
   inputs:{
       height:45,
       marginLeft:16,
-      borderBottomColor: '#d500f9',
+      borderBottomColor: '#000000',
       flex:1,
   },
   inputIcon:{
@@ -134,9 +136,9 @@ const styles = StyleSheet.create({
     borderRadius:30,
   },
   loginButton: {
-    backgroundColor: "#33ff00",
+    backgroundColor: "#DEB887",
   },
   loginText: {
-    color: 'white',
+    color: 'black',
   }
 });
