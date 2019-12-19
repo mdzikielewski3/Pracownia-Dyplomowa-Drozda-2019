@@ -23,7 +23,7 @@ export default class LoginView extends Component {
       surname: '',
     }
   }
-
+  
   onClickListener = (viewId) => {
     Alert.alert("Alert", "Button pressed "+viewId);
   }
@@ -73,7 +73,6 @@ export default class LoginView extends Component {
               onChangeText={(password_again) => this.setState({password_again})}/>
         </View>
 
-        
         <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.props.navigation.navigate('ProfileScreen')}>
           <Text style={styles.loginText}>Register</Text>
         </TouchableHighlight>
