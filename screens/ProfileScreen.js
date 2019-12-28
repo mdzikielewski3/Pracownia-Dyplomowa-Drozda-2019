@@ -38,11 +38,11 @@ export default class Profile extends Component {
               <Text style={styles.name}>{this.state.login}</Text>
               <Text style={styles.info}>{this.state.email}</Text>
               <Text style={styles.description}>Kiedyś tu będzie piękny settings</Text>
-              <TouchableOpacity style={styles.buttonContainer} onPress={() => this.props.navigation.navigate('RejestracjaScreen')}>
-                <Text style={styles.buttonText}>Opcion 1</Text>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('ProfileEditScreen')} style={styles.buttonContainer} onPress={() => this.props.navigation.navigate('ProfileEditScreen')}>
+                <Text style={styles.buttonText}>Edycja Profilu</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.buttonContainer}>
-                <Text style={styles.buttonText}>Opcion 2</Text> 
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('LoginScreen')} style={styles.buttonContainer}>
+                <Text style={styles.buttonText}>Logout</Text> 
               </TouchableOpacity>
             </View>
           </View>

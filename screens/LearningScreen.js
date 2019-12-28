@@ -1,6 +1,16 @@
 import React from 'react';
-import { StyleSheet,Text, Alert} from 'react-native';
-import { Container, 
+import {  
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableHighlight,
+  Image,
+  Alert,
+  ScrollView,
+  KeyboardAvoidingView} from 'react-native';
+import { 
+  Container, 
   Header, 
   Content,
   Footer, 
