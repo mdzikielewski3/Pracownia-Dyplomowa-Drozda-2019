@@ -1,34 +1,33 @@
 import React from 'react';
-import { StyleSheet, View, Alert } from 'react-native';
-import { connect } from 'react-redux';
-import { Container,Content} from 'native-base';
-import { AsyncStorage } from 'react-native';
-import Header from './MiniComponents/Header'
+import { StyleSheet, View } from 'react-native';
+import { Container,Content } from 'native-base';
+import {AsyncStorage} from 'react-native';
 import Footer from './MiniComponents/Footer'
 import Loader from './MiniComponents/Loader'
+import Header from './MiniComponents/Header'
 import Separator from './MiniComponents/Separator'
 import SwipeMyLists from './MiniComponents/SwipeMyLists'
 import SwipeSharedLists from './MiniComponents/SwipeSharedLists'
-import { URL , Colors } from '../Static'
-
-export default class Home extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      myLists:[],
-      sharedLists:[],
-      isLoading: true,
-      isLogged:''
+import { URL, Colors } from '../Static'
+//Done
+export default class Favorite extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        myLists:[],
+        sharedLists:[],
+        isLoading: true,
+        isLogged:''
+      }
+      this.checkLog = this.checkLog.bind(this)
+      this.fetchData = this.fetchData.bind(this)
+      this.favoriteList = this.favoriteList.bind(this)
+      this.favoriteSubscription = this.favoriteSubscription.bind(this)
+      this.deleteList = this.deleteList.bind(this)
+      this.deleteSubscription = this.deleteSubscription.bind(this)
     }
-    this.checkLog = this.checkLog.bind(this)
-    this.fetchData = this.fetchData.bind(this)
-    this.favoriteList = this.favoriteList.bind(this)
-    this.favoriteSubscription = this.favoriteSubscription.bind(this)
-    this.deleteList = this.deleteList.bind(this)
-    this.deleteSubscription = this.deleteSubscription.bind(this)
-  }
 
-  componentDidMount=()=>  {
+  componentDidMount=() =>  {
     this.checkLog()
     this.fetchData()
   }
@@ -39,10 +38,10 @@ export default class Home extends React.Component {
       isLogged:status
     })
   }
-
+/////////////////////////////////Fetch//////////////////////////////////////////
   async fetchData(){
     let id = await AsyncStorage.getItem('ID')
-    if(id == null) return
+    if(id === null) return
     ///////////////////////Fetch my lists//////////////////////////////////////////
     await fetch(URL + 'userLists/', { 
       method: 'post',
@@ -149,68 +148,60 @@ export default class Home extends React.Component {
     //   return err;
     // });
   }
-  ////////////////////////////////////////////////////////////////////
-  
+////////////////////////////////////////////////////////////////////////////////
+
   render() {
-    const renderHome = 
-      <Container style={styles.container}>
-        <Header title="Home"/>
-        
-        <Content style={{backgroundColor: Colors.second}}>
+      const renderFavorite=
+        <Container>
+          <Header title='Favorite lists'/>
 
-          {/* MY LISTS */}
-          <Separator title="My lists"/>
+          <Content style={{backgroundColor: Colors.second}}> 
+
+            {/* MY LISTS */}
+            <Separator title='My lists'/>
+
+            <View style={styles.swipeContainer}>
+              <SwipeMyLists 
+                lists={this.state.myLists.filter(function(el){
+                  return el.favorite == true
+                })}
+                favoriteList={this.favoriteList}
+                deleteList={this.deleteList}
+              />
+            </View>
+
+            {/* SHARED LISTS */}
+            <Separator title='Lists shared to me'/>
+
+            <View style={styles.swipeContainer}>
+                <SwipeSharedLists
+                  lists={this.state.sharedLists.filter(function(el){
+                    return el.favorite == true
+                  })}
+                  favoriteSubscription={this.favoriteSubscription}
+                  deleteSubscription={this.deleteSubscription}
+                />
+            </View>
           
-          <View style={styles.swipeContainer}>
-            <SwipeMyLists 
-              //onpress={() => Alert.alert('Śmiga')}
-              lists={this.state.myLists}
-              favoriteList={this.favoriteList}
-              deleteList={this.deleteList}
-            />
-          </View>
+          </Content>
 
-          {/* SHARED LISTS */}
-          <Separator title='Lists shared to me'/>
-
-          <View style={styles.swipeContainer}>
-            <SwipeSharedLists 
-              lists={this.state.sharedLists}
-              favoriteSubscription={this.favoriteSubscription}
-              deleteSubscription={this.deleteSubscription}
-            />
-          </View>
-
-        </Content>
-
-        <Footer props={this.props}/>
-
-      </Container>
+          <Footer props={this.props}/>
+        </Container>
     return (
-      <Container>
-        {this.state.isLogged != null
-          ? this.state.isLoading 
-            ? <Loader/> 
-            : renderHome
-          : null
-        }
-      </Container>      
+        <Container>
+            {this.state.isLoading ? <Loader/> : renderFavorite}
+        </Container>  
     );
   }
+
 }
 
 const styles = StyleSheet.create({
-  container:{
-    flex:1
+  container: {
+    flex: 1,
   },
   swipeContainer: {
     flex: 1,
   },
 });
-
-// const mapStateToProps = (state) => {
-//   return(
-//     users = state
-//   )};
-
-// export default connect(mapStateToProps)(Home);
+  

@@ -1,13 +1,27 @@
-import React from 'react';
-import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation'
 
-import MainTabNavigator from './MainTabNavigator';
-import LoginScreen from '../screens/LoginScreen';
+import LoginScreen from '../screens/LoginScreen'
+import RegisterScreen from '../screens/RegisterScreen'
+import FavoriteScreen from '../screens/FavoriteScreen'
+import HomeScreen from '../screens/HomeScreen'
+//import ProfileEditScreen from '../screens/ProfileEditScreen'
+import ProfileScreen from '../screens/ProfileScreen'
+import ShareScreen from '../screens/ShareScreen'
+//import AddListScreen from '../screens/AddListScreen'
+
+
+import Footer from '../screens/MiniComponents/Footer'
 export default createAppContainer(
   createSwitchNavigator({
-    // You could add another route here for authentication.
-    // Read more at https://reactnavigation.org/docs/en/auth-flow.html
     LoginScreen: LoginScreen,
-    //Main: MainTabNavigator,
+    RegisterScreen: RegisterScreen,
+    FavoriteScreen: FavoriteScreen,
+    HomeScreen: HomeScreen,
+    //ProfileEditScreen: ProfileEditScreen,
+    ProfileScreen: ProfileScreen,
+    ShareScreen: ShareScreen,
+    //AddListScreen: AddListScreen,
+
+    Footer: Footer
   })
-);
+)
