@@ -1,97 +1,151 @@
+//DONE
 import React, { Component } from 'react';
 import {
   StyleSheet,
   Text,
   View,
-  TextInput,
-  TouchableHighlight,
-  Image,
   Alert,
-  ScrollView
+  AsyncStorage,
+  KeyboardAvoidingView,
+  Keyboard,
+  TouchableWithoutFeedback
 } from 'react-native';
-import { Container, 
-  Header, 
-  Content,
-  Footer, 
-  FooterTab, 
-  Button, 
-  Icon, 
-  InputGroup, 
-  Input 
-} from 'native-base';
-
+import {Form, Item, Input, Label } from 'native-base';
+import GradientButton from 'react-native-gradient-buttons';
+import { URL, Colors, LogoColors, FormColors, ButtonColors } from '../Static'
+//this.props.navigation.navigate('AddListScreen')
 export default class LoginView extends Component {
 
   constructor(props) {
     super(props);
-    state = {
-      email   : '',
+    this.state = {
+      email: '',
       password: '',
-      password_again: '',
-      name: '',
-      surname: '',
     }
+    this.validateForm = this.validateForm.bind(this)
+    this.onClickLogin=this.onClickLogin.bind(this)
   }
+
+  validateForm(){
+    if(this.state.email == ''){
+      Alert.alert('Error',"Email can`t be empty")
+      return false
+    }
+    if(this.state.password == ''){
+      Alert.alert('Error',"Password can`t be empty")
+      return false
+    }
+    if((this.state.email.includes('@') === false)||(this.state.email.includes('.') === false)){
+      Alert.alert("Error","Email is not correct")
+      return false
+    }
+    if(this.state.email.lastIndexOf('@')> this.state.email.lastIndexOf('.')){
+      Alert.alert('Error','Email is not correct')
+      return false
+    }
+    return true
+  }
+  async onClickLogin(){
+    if(this.validateForm()){
+      await fetch(URL + 'login/', { 
+        method: 'post',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+          email: this.state.email,
+          password: this.state.password
+        })
+      })
+      .then((response) => {
+        if(response.status == 400){
+          Alert.alert('Error', 'User is not exist')
+        }
+        else{
+          response.json()
+          .then((res) => {
+            AsyncStorage.setItem('ID', JSON.stringify(res.id))
+            this.props.navigation.navigate('ProfileScreen')
+          })
+          
+        }})
   
-  onClickListener = (viewId) => {
-    Alert.alert("Alert", "Button pressed "+viewId);
+      .catch(function (err) {
+        console.log(err)
+        return err;
+      });
+      this.setState({
+        email:'',
+        password:''
+      })
+    }
   }
 
   render() {
     return (
-      <Container>
-      <Header></Header>
-      <Content>
-      <Image style={{width:100,height:100, marginBottom:50}}source={require('../assets/images/Leaf.png')}/>
-      
-      <View style={styles.inputContainer}>
-        <Image style={styles.inputIcon} source={{uri: 'https://image0.flaticon.com/icons/png/512/37/37572.png?size=1200x630f'}}/>
-        <TextInput style={styles.inputs}
-            placeholder="Email"
-            keyboardType="email-address"
-            underlineColorAndroid='transparent'
-            onChangeText={(email) => this.setState({email})}/>
-      </View>
-      
-      <View style={styles.inputContainer}>
-        <Image style={styles.inputIcon} source={require('../assets/images/user.png')}/>
-        <TextInput style={styles.inputs}
-            placeholder="Name"
-            keyboardType="name-phone-pad"
-            underlineColorAndroid='transparent'
-            onChangeText={(name) => this.setState({name})}/>
-      </View>
-
-      <View style={styles.inputContainer}>
-      <Image style={styles.inputIcon} source={require('../assets/images/key.png')}/>
-        <TextInput style={styles.inputs}
-            placeholder="Password"
-            secureTextEntry={true}
-            underlineColorAndroid='transparent'
-            onChangeText={(password) => this.setState({password})}/>
-      </View>
-
-      <View style={styles.inputContainer}>
-      <Image style={styles.inputIcon} source={require('../assets/images/key.png')}/>
-        <TextInput style={styles.inputs}
-            placeholder="Password again"
-            secureTextEntry={true}
-            underlineColorAndroid='transparent'
-            onChangeText={(password_again) => this.setState({password_again})}/>
-      </View>
-
-      <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.props.navigation.navigate('ProfileScreen')}>
-        <Text style={styles.loginText}>Register</Text>
-      </TouchableHighlight>
-
-      <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onClickListener('restore_password')}>
-          <Text>Have account? Login</Text>
-      </TouchableHighlight>
-      </Content>
-      </Container>
-
+      <TouchableWithoutFeedback onPress={()=> Keyboard.dismiss()}>
+        <View style={styles.container}>
         
-      
+          <KeyboardAvoidingView behavior='padding' style={styles.avoidContainer}>
+
+            <View style={styles.logoContainer}>
+              <Text style={styles.logoText}>Hello there,</Text>
+              <Text style={styles.logoText}>welcome back</Text>
+            </View>
+
+            <View style={styles.inputsContainer}>
+              <Form>
+                <Item floatingLabel style={styles.formItem}>
+                  <Label style={styles.formLabel}>E-mail</Label>
+                  <Input 
+                    keyboardType="email-address"
+                    style={styles.formInput}
+                    value={this.state.email}
+                    returnKeyType='next'
+                    autoCapitalize='none'
+                    onSubmitEditing={()=>{this.secondInput._root.focus()}}
+                    onChangeText={(email) => this.setState({email})}            
+                  />
+                </Item>
+                <Item floatingLabel style={styles.formItem}>
+                  <Label style={styles.formLabel}>Password</Label>
+                  <Input
+                    secureTextEntry
+                    value={this.state.password}
+                    style={styles.formInput}
+                    autoCapitalize='none'
+                    returnKeyType='go'
+                    getRef={(ref)=>{this.secondInput = ref}}
+                    onSubmitEditing={this.onClickLogin}
+                    onChangeText={(password) => this.setState({password})}
+                  />
+                </Item>
+              </Form>
+            </View>
+
+          </KeyboardAvoidingView>
+          
+          <View style={styles.buttonsContainer}>
+
+            {/* <Text style={styles.textButton} accessibilityRole='button'>Forgot your password?</Text> */}
+
+            <GradientButton
+              text="Login"
+              textStyle={{ fontSize: 20 }}
+              gradientBegin= {ButtonColors.primary}
+              gradientEnd={ButtonColors.second}
+              height={60}
+              width='90%'
+              radius={15}
+              impact
+              onPressAction={this.onClickLogin}
+            />
+
+            <Text style={styles.buttonsText}>Don`t have an account?
+              <Text accessibilityRole='button' style={styles.textButton} onPress={ () => this.props.navigation.navigate('RegisterScreen')}> Sign up!</Text>
+            </Text>
+          </View>
+
+        </View>
+      </TouchableWithoutFeedback>
     );
   }
 }
@@ -99,46 +153,51 @@ export default class LoginView extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#66CC66',
+    backgroundColor: Colors.primary,
   },
-  inputContainer: {
-      borderBottomColor: '#000000',
-      backgroundColor: '#FFF8DC',
-      borderRadius:30,
-      borderBottomWidth: 1,
-      width:250,
-      height:45,
-      marginBottom:20,
-      flexDirection: 'row',
-      alignItems:'center'
+  avoidContainer:{
+    flex:2,
+    justifyContent:"space-around"
   },
-  inputs:{
-      height:45,
-      marginLeft:16,
-      borderBottomColor: '#000000',
-      flex:1,
+  logoContainer:{
+    flex:1.5,
+    justifyContent:'center',
+    // backgroundColor:'#00F'
   },
-  inputIcon:{
-    width:30,
-    height:30,
-    marginLeft:15,
-    justifyContent: 'center'
+  logoText:{
+    color:LogoColors.text,
+    marginLeft:'5%',
+    fontSize:25
   },
-  buttonContainer: {
-    height:45,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom:20,
-    width:250,
-    borderRadius:30,
+  inputsContainer:{
+    flex:1,
+    // backgroundColor:'#F00'
   },
-  loginButton: {
-    backgroundColor: "#DEB887",
+  formItem:{
+    width:'90%'
   },
-  loginText: {
-    color: 'black',
-  }
+  formLabel:{
+    color:FormColors.label,
+    opacity:0.5
+  },
+  formInput:{
+    color:FormColors.input
+  },
+  buttonsContainer:{
+    flex:1.5,
+    alignItems:"center",
+    justifyContent:"space-around",
+    // backgroundColor:'#0F0'
+  },
+  textButton:{
+    textDecorationLine:"underline",
+    color: ButtonColors.textButton,
+    opacity:0.5
+  },
+  buttonsText:{
+    color: ButtonColors.buttonText,
+    opacity:0.5
+  },
 });
+      
+// <Image style={{width:100,height:100, marginBottom:50}} source={require('../Images/Leaf.png')}/>

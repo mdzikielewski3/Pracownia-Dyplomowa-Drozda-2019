@@ -1,76 +1,120 @@
 import React, { Component } from 'react'
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableOpacity
-} from 'react-native'
-import { Container,
-  Header,
-  Content,
-  Footer,
-  FooterTab,
-  Button,
-  Icon
-} from 'native-base'
+import {StyleSheet,Text,View,Image} from 'react-native'
+import { Container,Header,Content} from 'native-base'
+import {AsyncStorage} from 'react-native';
+import GradientButton from 'react-native-gradient-buttons';
+import Footer from './MiniComponents/Footer'
+import Loader from './MiniComponents/Loader'
+import Login from './LoginScreen'
+import { URL, Colors, ButtonColors } from '../Static'
 
 export default class Profile extends Component {
   constructor (props) {
     super(props)
     this.state = {
-
-      login: 'Janek Lesgos',
+      user:'',
       avatarUri: 'https://i.imgur.com/bWln98R.jpeg',
-      email: 'Rodo@xd.uwm.edu.student.com'
+      isLoading :true,
+      isLogged: ''
     }
   }
+  componentDidMount=()=>  {
+    this.fetchData()
+  }
 
+  async checkLog(){
+    let status = await AsyncStorage.getItem('ID')
+    this.setState({
+      isLogged : status
+    })
+  }
+
+  async fetchData(){
+    let id = await AsyncStorage.getItem('ID')
+    if(id === null) return
+    ///////////////////////Fetch user//////////////////////////////////////////
+    await fetch(URL + 'user/' + id)
+    .then((response) => response.json())
+    .then(res => this.setState({
+      user:res,
+      isLoading : false
+    }))
+    .catch(function (err) {
+      console.log(err)
+      return err;
+    })
+  }
+
+  async logOut(){
+     await AsyncStorage.removeItem('ID')
+     this.setState({
+       isLogged : null
+     })
+     this.props.navigation.navigate('LoginScreen')
+  }
+  
   render () {
-    return (
-      <Container>
+    const renderProfile = 
+      <Container style={styles.container}>
+
         <Header style={styles.header}>
           <Image style={styles.avatar} source={{uri: this.state.avatarUri }} />
         </Header>
-        <Content>
-          <View style={styles.body}>
-            <View style={styles.bodyContent}>
-              <Text style={styles.name}>{this.state.login}</Text>
-              <Text style={styles.info}>{this.state.email}</Text>
-              <Text style={styles.description}>Kiedyś tu będzie piękny settings</Text>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('ProfileEditScreen')} style={styles.buttonContainer} onPress={() => this.props.navigation.navigate('ProfileEditScreen')}>
-                <Text style={styles.buttonText}>Edycja Profilu</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('LoginScreen')} style={styles.buttonContainer}>
-                <Text style={styles.buttonText}>Logout</Text> 
-              </TouchableOpacity>
+
+        <Content contentContainerStyle={styles.contentBody}>
+            <View style={styles.contentInfo}>
+              <Text style={styles.username}>{this.state.user.username}</Text>
+              <Text style={styles.email}>{this.state.user.email}</Text>
             </View>
-          </View>
+
+            <View style={styles.contentButtons}>
+              <GradientButton
+                text="Edit profile"
+                textStyle={styles.buttonText}
+                style={styles.buttonContainer}
+                gradientBegin= {ButtonColors.primary}
+                gradientEnd={ButtonColors.second}
+                radius={15}
+                impact
+                onPressAction={()=> this.props.navigation.navigate('ProfileEditScreen')}
+              />
+
+              <GradientButton
+                text="Log out"
+                textStyle={styles.buttonText}
+                style={styles.buttonContainer}
+                gradientBegin= {ButtonColors.primary}
+                gradientEnd={ButtonColors.second}
+                radius={15}
+                impact
+                onPressAction = {() => this.props.navigation.navigate('LoginScreen')} 
+                //onPressAction={() => this.logOut}
+              />
+            </View>
         </Content>
-        <Footer>
-          <FooterTab style={styles.footerTab}>
-            <Button onPress={() => this.props.navigation.navigate('LearningScreen')} vertical>
-              <Icon style={styles.iconfooterTab} name='apps' />
-              <Text style={styles.footerText}>Home</Text>
-            </Button>
-            <Button onPress={() => this.props.navigation.navigate('ProfileScreen')} vertical>
-              <Icon style={styles.iconfooterTab} name='person' />
-              <Text style={styles.footerText}>Profile</Text>
-            </Button>
-            <Button onPress={() => this.props.navigation.navigate('LoginScreen')} vertical>
-              <Icon style={styles.iconfooterTab} name='md-exit' />
-              <Text style={styles.footerText}>Log out</Text>
-            </Button>
-          </FooterTab>
-        </Footer>
+
+        <Footer props={this.props}/>
       </Container>
+    return (
+      <Container>
+        {this.state.isLogged != null
+          ? this.state.isLoading 
+            ? <Loader/> 
+            : renderProfile
+          : <Login/>
+        }
+      </Container>  
     )
   }
 }
 
 const styles = StyleSheet.create({
+  container:{
+    flex:1,
+    backgroundColor:Colors.second
+  },
   header:{
-    backgroundColor: 'brown',
+    backgroundColor: Colors.primary,
     height: 200
   },
   avatar: {
@@ -78,58 +122,51 @@ const styles = StyleSheet.create({
     height: 175,
     borderRadius: 63,
     borderWidth: 4,
-    borderColor: 'brown',
-    marginBottom: 10,
-    //alignSelf: 'center',
+    borderColor: Colors.primary,
     position: 'absolute',
-    marginTop: 60
+    marginTop: 55,
   },
-  name: {
-    fontSize: 22,
-    color: 'black',
-    fontWeight: '600'
-  },
-  body: {
-    marginTop: 40
-  },
-  bodyContent: {
-    flex: 1,
+  contentBody: {
+    flex:1,
+    marginTop: '4%',
     alignItems: 'center',
-    padding: 30
   },
-  info: {
-    fontSize: 16,
+  contentInfo:{
+    flex:1,
+    width:'100%',
+    alignItems:'center',
+    justifyContent:'center',
+  },
+  username: {
+    fontSize: 25,
+    color: '#fff',
+    fontWeight:"bold"
+  },
+  email: {
+    fontSize: 20,
     color: '#DAA520',
-    marginTop: 10
+    marginTop: '3%'
   },
-  description: {
-    fontSize: 16,
-    color: '#696969',
-    marginTop: 10,
-    textAlign: 'center'
+  // description: {
+  //   fontSize: 16,
+  //   color: '#696969',
+  //   marginTop: 10,
+  //   textAlign: 'center',
+    
+  // },
+  contentButtons:{
+    flex:2,
+    width:'100%',
+    alignItems:'center',
+    justifyContent:'center',
   },
   buttonContainer: {
-    marginTop: 10,
-    height: 45,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 20,
-    width: 250,
-    borderRadius: 30,
-    backgroundColor: 'brown'
+    width:'80%',
+    height:50,
+    marginBottom: '8%',
   },
   buttonText: {
-    color: 'white'
+    color: '#fff',
+    fontSize: 18
   },
-  iconfooterTab: {
-    color: 'white'
-  },
-  footerText: {
-    color: 'white',
-    opacity: 0.5
-  },
-  footerTab: {
-    backgroundColor: 'brown'
-  }
 })
